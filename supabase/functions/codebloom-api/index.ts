@@ -1,6 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { projectsRoute } from './projects.ts';
 import { gamesRoute } from './games.ts';
+import { curriculumRoute } from './curriculum.ts';
+import { classesRoute } from './classes.ts';
+import { adminRoute } from './admin.ts';
 
 const allowedOrigins = (Deno.env.get("ALLOWED_ORIGINS") ?? "http://localhost:5173")
   .split(",").map((origin) => origin.trim());
@@ -20,8 +23,26 @@ Deno.serve(async (request: Request) => {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers });
   const path = new URL(request.url).pathname.replace(/^.*\/codebloom-api/, "");
   if (path === "/health" && request.method === "GET") return reply({ status: "healthy" });
+  if(path==='/api/auth/firebase/status'&&request.method==='GET') return reply({provider:'firebase',enabled:false,reason:'This deployment uses Supabase Auth.'});
 
   try {
+    if(path==='/api/auth/login'&&request.method==='POST'){
+      const raw=await request.text();if(raw.length>5000) return reply({error:'Request too large'},413);
+      let body;try{body=JSON.parse(raw);}catch{return reply({error:'Invalid JSON'},400);}
+      if(typeof body.username!=='string'||body.username.length>254||typeof body.password!=='string'||body.password.length>1000) return reply({error:'Invalid login details'},400);
+      let email=body.username.trim();
+      if(!email.includes('@')){
+        const service=createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,{auth:{persistSession:false}});
+        const {data:id,error}=await service.rpc('find_login_user',{p_username:email});
+        if(error) throw error;
+        if(id){const {data,error}=await service.auth.admin.getUserById(id);if(error) throw error;email=data.user.email??'';}
+        else email='invalid-login@invalid.example';
+      }
+      const authClient=createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_ANON_KEY')!,{auth:{persistSession:false}});
+      const {data,error}=await authClient.auth.signInWithPassword({email,password:body.password});
+      if(error||!data.session) return reply({error:'Invalid username, email or password. Confirm your email before signing in.'},401);
+      return reply({session:{access_token:data.session.access_token,refresh_token:data.session.refresh_token}});
+    }
     const authorization = request.headers.get("authorization") ?? "";
     if (!authorization.startsWith("Bearer ")) return reply({ error: "Sign in required" }, 401);
     const client = createClient(
@@ -38,14 +59,29 @@ Deno.serve(async (request: Request) => {
     if (projects) return reply(projects.body, projects.status);
     const games = await gamesRoute(client,path,request);
     if(games) return reply(games.body,games.status);
+    const curriculum=await curriculumRoute(client,()=>createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,{auth:{persistSession:false}}),auth.user.id,profile,path,request);
+    if(curriculum) return reply(curriculum.body,curriculum.status);
+    const classes=await classesRoute(client,()=>createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,{auth:{persistSession:false}}),auth.user.id,profile.role,path,request);
+    if(classes) return reply(classes.body,classes.status);
+    const admin=await adminRoute(client,()=>createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,{auth:{persistSession:false}}),profile.role,path,request);
+    if(admin) return reply(admin.body,admin.status);
+    if(path==='/api/achievements/me'&&request.method==='GET'){
+      const {data:catalog,error:catalogError}=await client.from('achievement_catalog').select('*');if(catalogError) throw catalogError;
+      const {data:earned,error:earnedError}=await client.from('student_achievements').select('*');if(earnedError) throw earnedError;
+      return reply(catalog.map(a=>({...a.data,earned:earned.some(e=>e.achievement_id===a.id),earnedAt:earned.find(e=>e.achievement_id===a.id)?.earned_at??null})));
+    }
+    if(path==='/api/python/exercises'&&request.method==='GET') return reply({available:false,message:'Python Discovery Lab exercises are configured through the curriculum service.'});
+    if(path==='/api/python/run'&&request.method==='POST') return reply({available:false,success:false,output:'',error:'',exitCode:0,timedOut:false,reason:'Python execution is not enabled in this deployment. The logic missions are available in Python Discovery Lab.'});
 
     if (path === "/api/auth/me" && request.method === "GET") {
       return reply({ id: profile.id, username: profile.username, displayName: profile.display_name,
         email: auth.user.email, role: profile.role, accountStatus: profile.account_status, createdAt: profile.created_at });
     }
     if (path === "/api/students/me" && request.method === "GET") {
+      const {data:points,error:pointError}=await client.from('point_transactions').select('amount');if(pointError) throw pointError;
+      const {count,error:progressError}=await client.from('mission_progress').select('*',{count:'exact',head:true}).eq('status','completed');if(progressError) throw progressError;
       return reply({ userId: profile.id, displayName: profile.display_name, username: profile.username,
-        character: profile.character, ageGroup: profile.age_group, preferencesJson: JSON.stringify(profile.preferences) });
+        character: profile.character, ageGroup: profile.age_group,currentLevel:(count??0)+1,totalPoints:points.reduce((sum,p)=>sum+p.amount,0), preferencesJson: JSON.stringify(profile.preferences) });
     }
     if (request.method === 'PUT' && ['/api/students/me/character','/api/students/me/preferences'].includes(path)) {
       if(profile.role !== 'student') return reply({error:'Student access required'},403);
@@ -95,7 +131,7 @@ Deno.serve(async (request: Request) => {
       const answer = result.candidates?.[0]?.content?.parts?.map((part: { text?: string }) => part.text ?? "").join("");
       return reply({ reply: answer || "Try asking a programming question in a different way.", disabled: false });
     }
-    return reply({ error: "This route has not been migrated yet" }, 501);
+    return reply({ error: "Route not found" }, 404);
   } catch {
     return reply({ error: "The request could not be completed" }, 500);
   }

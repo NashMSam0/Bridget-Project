@@ -37,4 +37,6 @@ dist-ssr
 
 # Vercel CLI project link (machine-specific)
 .vercel
+supabase/.temp/
+supabase/.branches/
 .env*

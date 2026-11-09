@@ -4,7 +4,7 @@ create table public.game_plays(
   game_key text not null,
   play_count integer not null default 0 check(play_count>=0),
   completed boolean not null default false,
-  best_score integer not null default 0 check(best_score between 0 and 100),
+  best_score integer not null default 0 check(best_score between 0 and 10000),
   last_played_at timestamptz not null default now(),
   primary key(student_id,game_key)
 );
@@ -22,7 +22,7 @@ begin
     then raise exception 'Student access required'; end if;
   if p_game_key not in ('jungle-treasure','coding-maze','space-explorer','collect-the-stars','robot-racing','star-catcher','pattern-garden')
     then raise exception 'Unknown game'; end if;
-  if p_score<0 or p_score>100 then raise exception 'Invalid score'; end if;
+  if p_score<0 or p_score>10000 then raise exception 'Invalid score'; end if;
   insert into public.game_plays(student_id,game_key,play_count,completed,best_score)
     values(auth.uid(),p_game_key,case when p_complete then 0 else 1 end,p_complete,case when p_complete then p_score else 0 end)
   on conflict(student_id,game_key) do update set

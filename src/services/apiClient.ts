@@ -13,7 +13,7 @@ function getApiConfigurationError(): string | null {
   if (!API_BASE_URL) {
     return (
       "The production API URL is not configured. In Vercel, open Project Settings > " +
-      "Environment Variables and set VITE_API_BASE_URL to your deployed ASP.NET Core " +
+      "Environment Variables and set VITE_API_BASE_URL to your deployed " +
       "API base URL, then redeploy the frontend."
     );
   }
@@ -191,8 +191,9 @@ export async function loginUser(
   input: LoginInput,
 ): Promise<{ user: AuthUser; expiresAt: string }> {
   if (supabase) {
-    const { data, error } = await supabase.auth.signInWithPassword({ email: input.usernameOrEmail.trim(), password: input.password });
-    if (error) throw new ApiError(error.message, 401);
+    const result = await api.post<{session:{access_token:string;refresh_token:string}}>('/api/auth/login', {username:input.usernameOrEmail.trim(),password:input.password});
+    const { data, error } = await supabase.auth.setSession(result.session);
+    if (error || !data.session) throw new ApiError(error?.message ?? 'Unable to start your session.', 401);
     return { user: await getCurrentUser(), expiresAt: new Date(data.session.expires_at! * 1000).toISOString() };
   }
   // The backend field is `username`, but the UI labels it "email or username";

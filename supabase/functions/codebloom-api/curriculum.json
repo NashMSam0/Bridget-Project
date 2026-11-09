@@ -1,0 +1,794 @@
+{
+  "worlds": [
+    {
+      "id": 1,
+      "key": "world-bloom",
+      "name": "The Coding Garden",
+      "tagline": "Where every skill takes root.",
+      "description": "Learn programming fundamentals: instructions, sequencing and basic movement.",
+      "order": 1,
+      "isPublished": true
+    },
+    {
+      "id": 2,
+      "key": "world-forest",
+      "name": "Forest of Loops",
+      "tagline": "Repeat, repeat, repeat.",
+      "description": "Practise repetition and loops by finding efficient, repeating paths.",
+      "order": 2,
+      "isPublished": true
+    },
+    {
+      "id": 3,
+      "key": "world-mountains",
+      "name": "Decision Mountains",
+      "tagline": "Choose your path.",
+      "description": "Plan around obstacles and choose the right route through each puzzle.",
+      "order": 3,
+      "isPublished": true
+    },
+    {
+      "id": 4,
+      "key": "world-workshop",
+      "name": "Inventor's Workshop",
+      "tagline": "Build reusable actions.",
+      "description": "Combine movement, turning and planning to solve larger workshops.",
+      "order": 4,
+      "isPublished": true
+    },
+    {
+      "id": 5,
+      "key": "world-python",
+      "name": "Python Discovery Lab",
+      "tagline": "Think like a programmer.",
+      "description": "Logic puzzles that prepare you for Python. Live Python execution is not enabled in this environment.",
+      "order": 5,
+      "isPublished": true
+    },
+    {
+      "id": 6,
+      "key": "world-creator",
+      "name": "CodeBloom Creator Lab",
+      "tagline": "Create your own projects.",
+      "description": "Independent projects and challenges using everything you have learned.",
+      "order": 6,
+      "isPublished": true
+    }
+  ],
+  "missions": [
+    {
+      "id": 1,
+      "worldId": 1,
+      "key": "mission-1",
+      "title": "Help Bloom Reach the Flower",
+      "description": "Learn how to arrange instructions in the right order to guide Bloom through the garden to the flower.",
+      "learningConcept": "Sequencing",
+      "difficulty": "Easy",
+      "order": 1,
+      "maxSteps": 50,
+      "configJson": "{\"grid\":{\"cols\":5,\"rows\":3},\"start\":{\"x\":1,\"y\":1},\"goal\":{\"x\":4,\"y\":1},\"blocks\":[\"move\",\"turn_left\",\"turn_right\"],\"optimalBlocks\":3,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [],
+      "prerequisiteKeys": [],
+      "hints": [
+        {
+          "id": 10,
+          "hintText": "Drag three Move blocks into your program.",
+          "order": 1
+        },
+        {
+          "id": 11,
+          "hintText": "Bloom starts facing east, straight towards the flower.",
+          "order": 2
+        },
+        {
+          "id": 12,
+          "hintText": "Run the program to watch Bloom walk.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "First Steps",
+      "levelOrder": 1
+    },
+    {
+      "id": 2,
+      "worldId": 1,
+      "key": "mission-2",
+      "title": "The Lost Seed",
+      "description": "Help Bloom carry a seed across the garden by planning every move.",
+      "learningConcept": "Sequencing",
+      "difficulty": "Easy",
+      "order": 2,
+      "maxSteps": 60,
+      "configJson": "{\"grid\":{\"cols\":6,\"rows\":4},\"start\":{\"x\":0,\"y\":0},\"goal\":{\"x\":5,\"y\":3},\"blocks\":[\"move\",\"turn_left\",\"turn_right\"],\"optimalBlocks\":9,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        1
+      ],
+      "prerequisiteKeys": [
+        "mission-1"
+      ],
+      "hints": [
+        {
+          "id": 20,
+          "hintText": "Move east across the top row first.",
+          "order": 1
+        },
+        {
+          "id": 21,
+          "hintText": "Turn right to face south, then move down.",
+          "order": 2
+        },
+        {
+          "id": 22,
+          "hintText": "Fewer blocks means a higher efficiency score.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "First Steps",
+      "levelOrder": 1
+    },
+    {
+      "id": 3,
+      "worldId": 1,
+      "key": "mission-3",
+      "title": "Around the Watering Can",
+      "description": "A watering can blocks the straight path. Guide Bloom around it.",
+      "learningConcept": "Sequencing",
+      "difficulty": "Medium",
+      "order": 3,
+      "maxSteps": 80,
+      "configJson": "{\"grid\":{\"cols\":7,\"rows\":3},\"start\":{\"x\":0,\"y\":1},\"goal\":{\"x\":6,\"y\":1},\"blocks\":[\"move\",\"turn_left\",\"turn_right\"],\"optimalBlocks\":12,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":3,\"y\":1}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        2
+      ],
+      "prerequisiteKeys": [
+        "mission-2"
+      ],
+      "hints": [
+        {
+          "id": 30,
+          "hintText": "Walk forward until the watering can blocks you.",
+          "order": 1
+        },
+        {
+          "id": 31,
+          "hintText": "Turn right to step around it, then turn left to face east again.",
+          "order": 2
+        },
+        {
+          "id": 32,
+          "hintText": "Return to the middle row before reaching the flower.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-2",
+      "levelName": "Garden Paths",
+      "levelOrder": 2
+    },
+    {
+      "id": 4,
+      "worldId": 2,
+      "key": "mission-1",
+      "title": "Loop the Meadow",
+      "description": "Cross the meadow in a repeating pattern of moves.",
+      "learningConcept": "Loops",
+      "difficulty": "Easy",
+      "order": 1,
+      "maxSteps": 50,
+      "configJson": "{\"grid\":{\"cols\":6,\"rows\":3},\"start\":{\"x\":0,\"y\":0},\"goal\":{\"x\":5,\"y\":0},\"blocks\":[\"move\",\"turn_left\",\"turn_right\",\"repeat\"],\"loopBlocks\":[\"repeat\"],\"optimalBlocks\":5,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        3
+      ],
+      "prerequisiteKeys": [
+        "mission-3"
+      ],
+      "hints": [
+        {
+          "id": 40,
+          "hintText": "You need to move east five times.",
+          "order": 1
+        },
+        {
+          "id": 41,
+          "hintText": "A Repeat block can run the same move many times.",
+          "order": 2
+        },
+        {
+          "id": 42,
+          "hintText": "A loop of five moves is the shortest solution.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "Loop Meadow",
+      "levelOrder": 1
+    },
+    {
+      "id": 5,
+      "worldId": 2,
+      "key": "mission-2",
+      "title": "Around the Thicket",
+      "description": "A thicket blocks the middle of the meadow. Loop around it.",
+      "learningConcept": "Loops",
+      "difficulty": "Medium",
+      "order": 2,
+      "maxSteps": 70,
+      "configJson": "{\"grid\":{\"cols\":6,\"rows\":5},\"start\":{\"x\":0,\"y\":2},\"goal\":{\"x\":5,\"y\":2},\"blocks\":[\"move\",\"turn_left\",\"turn_right\",\"repeat\"],\"loopBlocks\":[\"repeat\"],\"optimalBlocks\":11,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":2}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        4
+      ],
+      "prerequisiteKeys": [
+        "mission-1"
+      ],
+      "hints": [
+        {
+          "id": 50,
+          "hintText": "Move forward once, then turn right.",
+          "order": 1
+        },
+        {
+          "id": 51,
+          "hintText": "Walk along the row below the thicket.",
+          "order": 2
+        },
+        {
+          "id": 52,
+          "hintText": "Turn back north after you pass the thicket.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "Loop Meadow",
+      "levelOrder": 1
+    },
+    {
+      "id": 6,
+      "worldId": 2,
+      "key": "mission-3",
+      "title": "Forest Spiral",
+      "description": "Reach the heart of the forest by travelling south and east.",
+      "learningConcept": "Loops",
+      "difficulty": "Medium",
+      "order": 3,
+      "maxSteps": 80,
+      "configJson": "{\"grid\":{\"cols\":5,\"rows\":5},\"start\":{\"x\":0,\"y\":0},\"goal\":{\"x\":4,\"y\":4},\"blocks\":[\"move\",\"turn_left\",\"turn_right\",\"repeat\"],\"loopBlocks\":[\"repeat\"],\"optimalBlocks\":9,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":2}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        5
+      ],
+      "prerequisiteKeys": [
+        "mission-2"
+      ],
+      "hints": [
+        {
+          "id": 60,
+          "hintText": "Travel east along the top row.",
+          "order": 1
+        },
+        {
+          "id": 61,
+          "hintText": "Turn right to head south.",
+          "order": 2
+        },
+        {
+          "id": 62,
+          "hintText": "The obstacle in the middle does not block the outer path.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-2",
+      "levelName": "Deep Forest",
+      "levelOrder": 2
+    },
+    {
+      "id": 7,
+      "worldId": 3,
+      "key": "mission-1",
+      "title": "Mountain Pass",
+      "description": "Find the safe pass through the rocks.",
+      "learningConcept": "Conditional thinking",
+      "difficulty": "Easy",
+      "order": 1,
+      "maxSteps": 60,
+      "configJson": "{\"grid\":{\"cols\":6,\"rows\":4},\"start\":{\"x\":0,\"y\":3},\"goal\":{\"x\":5,\"y\":0},\"blocks\":[\"move\",\"turn_left\",\"turn_right\"],\"optimalBlocks\":10,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":3},{\"x\":2,\"y\":2},{\"x\":2,\"y\":1}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        6
+      ],
+      "prerequisiteKeys": [
+        "mission-3"
+      ],
+      "hints": [
+        {
+          "id": 70,
+          "hintText": "The rocks form a wall in the middle.",
+          "order": 1
+        },
+        {
+          "id": 71,
+          "hintText": "Go north along the left edge first.",
+          "order": 2
+        },
+        {
+          "id": 72,
+          "hintText": "Then turn right and travel east to the summit.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "Mountain Pass",
+      "levelOrder": 1
+    },
+    {
+      "id": 8,
+      "worldId": 3,
+      "key": "mission-2",
+      "title": "Bridge Crossing",
+      "description": "The bridge is broken in the middle. Cross using the lower path.",
+      "learningConcept": "Conditional thinking",
+      "difficulty": "Medium",
+      "order": 2,
+      "maxSteps": 80,
+      "configJson": "{\"grid\":{\"cols\":7,\"rows\":5},\"start\":{\"x\":0,\"y\":2},\"goal\":{\"x\":6,\"y\":2},\"blocks\":[\"move\",\"turn_left\",\"turn_right\"],\"optimalBlocks\":12,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":2},{\"x\":3,\"y\":2},{\"x\":4,\"y\":2}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        7
+      ],
+      "prerequisiteKeys": [
+        "mission-1"
+      ],
+      "hints": [
+        {
+          "id": 80,
+          "hintText": "Step forward once before turning.",
+          "order": 1
+        },
+        {
+          "id": 81,
+          "hintText": "Travel along the row beneath the broken bridge.",
+          "order": 2
+        },
+        {
+          "id": 82,
+          "hintText": "Turn north to rejoin the middle row after the gap.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "Mountain Pass",
+      "levelOrder": 1
+    },
+    {
+      "id": 9,
+      "worldId": 3,
+      "key": "mission-3",
+      "title": "Summit Trail",
+      "description": "Climb to the summit using the left edge of the mountain.",
+      "learningConcept": "Conditional thinking",
+      "difficulty": "Hard",
+      "order": 3,
+      "maxSteps": 90,
+      "configJson": "{\"grid\":{\"cols\":5,\"rows\":5},\"start\":{\"x\":0,\"y\":4},\"goal\":{\"x\":4,\"y\":0},\"blocks\":[\"move\",\"turn_left\",\"turn_right\"],\"optimalBlocks\":10,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":2}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        8
+      ],
+      "prerequisiteKeys": [
+        "mission-2"
+      ],
+      "hints": [
+        {
+          "id": 90,
+          "hintText": "Face north and climb the left edge.",
+          "order": 1
+        },
+        {
+          "id": 91,
+          "hintText": "Turn right at the top.",
+          "order": 2
+        },
+        {
+          "id": 92,
+          "hintText": "Travel east to the summit flag.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-2",
+      "levelName": "High Summit",
+      "levelOrder": 2
+    },
+    {
+      "id": 10,
+      "worldId": 4,
+      "key": "mission-1",
+      "title": "Gear Grid",
+      "description": "Navigate the workshop floor to reach the blueprint table.",
+      "learningConcept": "Functions",
+      "difficulty": "Easy",
+      "order": 1,
+      "maxSteps": 60,
+      "configJson": "{\"grid\":{\"cols\":5,\"rows\":4},\"start\":{\"x\":0,\"y\":0},\"goal\":{\"x\":4,\"y\":3},\"blocks\":[\"move\",\"turn_left\",\"turn_right\",\"repeat\"],\"optimalBlocks\":8,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        9
+      ],
+      "prerequisiteKeys": [
+        "mission-3"
+      ],
+      "hints": [
+        {
+          "id": 100,
+          "hintText": "Move east along the top bench.",
+          "order": 1
+        },
+        {
+          "id": 101,
+          "hintText": "Turn right to face the blueprint table.",
+          "order": 2
+        },
+        {
+          "id": 102,
+          "hintText": "Move south to reach it.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "Gear Room",
+      "levelOrder": 1
+    },
+    {
+      "id": 11,
+      "worldId": 4,
+      "key": "mission-2",
+      "title": "Conveyor Detour",
+      "description": "The conveyor belt is blocked. Use the service lane.",
+      "learningConcept": "Functions",
+      "difficulty": "Medium",
+      "order": 2,
+      "maxSteps": 80,
+      "configJson": "{\"grid\":{\"cols\":6,\"rows\":4},\"start\":{\"x\":0,\"y\":1},\"goal\":{\"x\":5,\"y\":1},\"blocks\":[\"move\",\"turn_left\",\"turn_right\",\"repeat\"],\"optimalBlocks\":12,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":1},{\"x\":3,\"y\":1}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        10
+      ],
+      "prerequisiteKeys": [
+        "mission-1"
+      ],
+      "hints": [
+        {
+          "id": 110,
+          "hintText": "Move forward once, then turn right.",
+          "order": 1
+        },
+        {
+          "id": 111,
+          "hintText": "Follow the service lane below the conveyor.",
+          "order": 2
+        },
+        {
+          "id": 112,
+          "hintText": "Turn north after the blockage and continue east.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "Gear Room",
+      "levelOrder": 1
+    },
+    {
+      "id": 12,
+      "worldId": 4,
+      "key": "mission-3",
+      "title": "Blueprint",
+      "description": "Follow the blueprint to the far corner of the workshop.",
+      "learningConcept": "Functions",
+      "difficulty": "Medium",
+      "order": 3,
+      "maxSteps": 90,
+      "configJson": "{\"grid\":{\"cols\":5,\"rows\":5},\"start\":{\"x\":0,\"y\":0},\"goal\":{\"x\":4,\"y\":4},\"blocks\":[\"move\",\"turn_left\",\"turn_right\",\"repeat\"],\"optimalBlocks\":9,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":2}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        11
+      ],
+      "prerequisiteKeys": [
+        "mission-2"
+      ],
+      "hints": [
+        {
+          "id": 120,
+          "hintText": "The blueprint shows a simple L-shaped route.",
+          "order": 1
+        },
+        {
+          "id": 121,
+          "hintText": "Travel east first, then south.",
+          "order": 2
+        },
+        {
+          "id": 122,
+          "hintText": "The central crate is not on your path.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-2",
+      "levelName": "Blueprint Loft",
+      "levelOrder": 2
+    },
+    {
+      "id": 13,
+      "worldId": 5,
+      "key": "mission-1",
+      "title": "Python Path",
+      "description": "Plan a direct route through the lab entrance.",
+      "learningConcept": "Algorithms",
+      "difficulty": "Easy",
+      "order": 1,
+      "maxSteps": 50,
+      "configJson": "{\"grid\":{\"cols\":5,\"rows\":3},\"start\":{\"x\":0,\"y\":1},\"goal\":{\"x\":4,\"y\":1},\"blocks\":[\"move\",\"turn_left\",\"turn_right\"],\"optimalBlocks\":4,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        12
+      ],
+      "prerequisiteKeys": [
+        "mission-3"
+      ],
+      "hints": [
+        {
+          "id": 130,
+          "hintText": "The path is a straight line east.",
+          "order": 1
+        },
+        {
+          "id": 131,
+          "hintText": "Four Move blocks are enough.",
+          "order": 2
+        },
+        {
+          "id": 132,
+          "hintText": "Think of each block as one line of code.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "Lab Entrance",
+      "levelOrder": 1
+    },
+    {
+      "id": 14,
+      "worldId": 5,
+      "key": "mission-2",
+      "title": "Indent Alley",
+      "description": "Step around the equipment in the alley.",
+      "learningConcept": "Algorithms",
+      "difficulty": "Medium",
+      "order": 2,
+      "maxSteps": 80,
+      "configJson": "{\"grid\":{\"cols\":6,\"rows\":4},\"start\":{\"x\":0,\"y\":3},\"goal\":{\"x\":5,\"y\":0},\"blocks\":[\"move\",\"turn_left\",\"turn_right\"],\"optimalBlocks\":10,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":1},{\"x\":2,\"y\":2}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        13
+      ],
+      "prerequisiteKeys": [
+        "mission-1"
+      ],
+      "hints": [
+        {
+          "id": 140,
+          "hintText": "Move east once, then turn left to face north.",
+          "order": 1
+        },
+        {
+          "id": 141,
+          "hintText": "Climb to the top row before turning east.",
+          "order": 2
+        },
+        {
+          "id": 142,
+          "hintText": "Avoid the equipment column in the middle.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "Lab Entrance",
+      "levelOrder": 1
+    },
+    {
+      "id": 15,
+      "worldId": 5,
+      "key": "mission-3",
+      "title": "Loop Lab",
+      "description": "Find the most efficient route through the algorithm hall.",
+      "learningConcept": "Algorithms",
+      "difficulty": "Hard",
+      "order": 3,
+      "maxSteps": 90,
+      "configJson": "{\"grid\":{\"cols\":6,\"rows\":5},\"start\":{\"x\":0,\"y\":4},\"goal\":{\"x\":5,\"y\":0},\"blocks\":[\"move\",\"turn_left\",\"turn_right\",\"repeat\"],\"loopBlocks\":[\"repeat\"],\"optimalBlocks\":11,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":3},{\"x\":2,\"y\":2},{\"x\":2,\"y\":1}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        14
+      ],
+      "prerequisiteKeys": [
+        "mission-2"
+      ],
+      "hints": [
+        {
+          "id": 150,
+          "hintText": "Turn north and follow the left wall.",
+          "order": 1
+        },
+        {
+          "id": 151,
+          "hintText": "Turn right when you reach the top row.",
+          "order": 2
+        },
+        {
+          "id": 152,
+          "hintText": "Travel east to the goal.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-2",
+      "levelName": "Algorithm Hall",
+      "levelOrder": 2
+    },
+    {
+      "id": 16,
+      "worldId": 6,
+      "key": "mission-1",
+      "title": "Build Your Dream",
+      "description": "Cross the studio to place your first creation.",
+      "learningConcept": "Projects",
+      "difficulty": "Easy",
+      "order": 1,
+      "maxSteps": 60,
+      "configJson": "{\"grid\":{\"cols\":6,\"rows\":5},\"start\":{\"x\":0,\"y\":0},\"goal\":{\"x\":5,\"y\":4},\"blocks\":[\"move\",\"turn_left\",\"turn_right\",\"repeat\"],\"optimalBlocks\":10,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":2}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        15
+      ],
+      "prerequisiteKeys": [
+        "mission-3"
+      ],
+      "hints": [
+        {
+          "id": 160,
+          "hintText": "Travel across the top of the studio.",
+          "order": 1
+        },
+        {
+          "id": 161,
+          "hintText": "Turn right to face your creation.",
+          "order": 2
+        },
+        {
+          "id": 162,
+          "hintText": "Move down the right wall.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "Studio",
+      "levelOrder": 1
+    },
+    {
+      "id": 17,
+      "worldId": 6,
+      "key": "mission-2",
+      "title": "Creator Challenge",
+      "description": "A sculpture blocks the studio. Find a creative route around it.",
+      "learningConcept": "Projects",
+      "difficulty": "Medium",
+      "order": 2,
+      "maxSteps": 90,
+      "configJson": "{\"grid\":{\"cols\":7,\"rows\":5},\"start\":{\"x\":0,\"y\":4},\"goal\":{\"x\":6,\"y\":0},\"blocks\":[\"move\",\"turn_left\",\"turn_right\",\"repeat\"],\"optimalBlocks\":13,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":4},{\"x\":2,\"y\":3},{\"x\":2,\"y\":2},{\"x\":2,\"y\":1}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        16
+      ],
+      "prerequisiteKeys": [
+        "mission-1"
+      ],
+      "hints": [
+        {
+          "id": 170,
+          "hintText": "Move north along the left wall.",
+          "order": 1
+        },
+        {
+          "id": 171,
+          "hintText": "Turn east after passing the sculpture.",
+          "order": 2
+        },
+        {
+          "id": 172,
+          "hintText": "Climb the final column to reach the goal.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-1",
+      "levelName": "Studio",
+      "levelOrder": 1
+    },
+    {
+      "id": 18,
+      "worldId": 6,
+      "key": "mission-3",
+      "title": "Final Bloom",
+      "description": "Complete the final exhibition route and make Bloom bloom.",
+      "learningConcept": "Projects",
+      "difficulty": "Hard",
+      "order": 3,
+      "maxSteps": 100,
+      "configJson": "{\"grid\":{\"cols\":8,\"rows\":5},\"start\":{\"x\":0,\"y\":2},\"goal\":{\"x\":7,\"y\":2},\"blocks\":[\"move\",\"turn_left\",\"turn_right\",\"repeat\"],\"optimalBlocks\":13,\"scoring\":{\"main\":70,\"efficiency\":20,\"bonus\":10},\"obstacles\":[{\"x\":2,\"y\":2},{\"x\":3,\"y\":2},{\"x\":4,\"y\":2},{\"x\":5,\"y\":2}]}",
+      "version": 1,
+      "isPublished": true,
+      "isArchived": false,
+      "prerequisiteIds": [
+        17
+      ],
+      "prerequisiteKeys": [
+        "mission-2"
+      ],
+      "hints": [
+        {
+          "id": 180,
+          "hintText": "Walk to the first exhibit, then step down.",
+          "order": 1
+        },
+        {
+          "id": 181,
+          "hintText": "Follow the lower gallery past the exhibits.",
+          "order": 2
+        },
+        {
+          "id": 182,
+          "hintText": "Turn north and east to reach the final flower.",
+          "order": 3
+        }
+      ],
+      "levelKey": "level-2",
+      "levelName": "Gallery",
+      "levelOrder": 2
+    }
+  ]
+}
