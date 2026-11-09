@@ -177,9 +177,8 @@ export async function registerUser(
   input: RegisterInput,
 ): Promise<{ user: AuthUser; expiresAt: string }> {
   if (supabase) {
-    if (input.role !== 'student') throw new ApiError('Instructor accounts must be approved by an administrator.', 403);
     const { data, error } = await supabase.auth.signUp({ email: input.email, password: input.password,
-      options: { data: { username: input.username, displayName: input.displayName, character: input.character, ageGroup: input.ageGroup } } });
+      options: { data: { username: input.username, displayName: input.displayName, role: input.role, character: input.character, ageGroup: input.ageGroup } } });
     if (error) throw new ApiError(error.message, 400);
     if (!data.session) throw new ApiError('Check your email to confirm your account, then sign in.', 400);
     return { user: await getCurrentUser(), expiresAt: new Date(data.session.expires_at! * 1000).toISOString() };

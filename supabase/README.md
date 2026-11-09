@@ -16,10 +16,10 @@ applied through the dashboard and subsequent migrations through the authenticate
 CLI. Do not reset the database. SQL Server learner data remains untouched and is
 not automatically imported; existing learners need a planned identity/data import.
 
-New accounts default to student. Administrators approve instructor roles through
-the application. The first administrator must be an existing Supabase Auth user
-whose profile role is set deliberately in the Supabase dashboard.
-Email confirmation follows the Supabase project's Auth settings.
+New accounts can select student or instructor, matching the original application.
+Public signup can never grant admin access. The first administrator is a Supabase Auth user
+whose profile role is assigned deliberately after signup. Student email confirmation
+is disabled at the owner's request. Admin roles are assigned separately.
 
 Firebase is replaced by Supabase Auth. Google sign-in requires Google OAuth
 credentials and Supabase provider configuration. Python execution remains disabled,

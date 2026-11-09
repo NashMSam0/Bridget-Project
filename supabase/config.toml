@@ -9,7 +9,7 @@ additional_redirect_urls = ["https://codebloom-drab.vercel.app/**", "http://loca
 site_url = "https://codebloom-drab.vercel.app"
 
 [auth.email]
-enable_confirmations = true
+enable_confirmations = false
 max_frequency = "1m0s"
 otp_length = 8
 

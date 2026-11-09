@@ -10,9 +10,8 @@ export async function adminRoute(client:SupabaseClient,service:()=>SupabaseClien
   if(path==='/api/admin/audit-logs'){const {data,error}=await client.from('audit_logs').select('*').order('created_at',{ascending:false}).limit(200);if(error) throw error;return {body:data.map(camel)};}
   if(path==='/api/admin/settings'){const {data,error}=await client.from('platform_settings').select('*');if(error) throw error;return {body:data.map(camel)};}
   if(path==='/api/admin/users'){
-   const {data,error}=await admin.from('profiles').select('*');if(error) throw error;
-   const {data:points,error:pointsError}=await admin.from('point_transactions').select('student_id,amount');if(pointsError) throw pointsError;
-   return {body:data.map(row=>({...camel(row),email:'',totalPoints:points.filter(p=>p.student_id===row.id).reduce((sum,p)=>sum+p.amount,0)}))};
+   const {data,error}=await client.rpc('admin_user_directory');if(error) throw error;
+   return {body:data.map((row:Record<string,unknown>)=>camel(row))};
   }
   if(path==='/api/admin/missions'){
    const {data,error}=await client.from('mission_overrides').select('*');if(error) throw error;

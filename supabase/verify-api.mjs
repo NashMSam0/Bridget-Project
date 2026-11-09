@@ -13,9 +13,15 @@ async function call(token,path,method='GET',body){
 async function expect(token,path,method='GET',body,status=200){const result=await call(token,path,method,body);assert(result.status===status,`${method} ${path}: expected ${status}, received ${result.status}: ${JSON.stringify(result.data)}`);return result.data;}
 async function identity(role){
  const username='verify_'+crypto.randomUUID().replaceAll('-','');const email=`${username}@example.invalid`;const password=crypto.randomUUID()+'aA!7';
- const {data,error}=await service.auth.admin.createUser({email,password,email_confirm:true,user_metadata:{username,displayName:'Temporary verification account',character:'girl'}});if(error)throw error;
+ const signupClient=createClient(url,anonKey,{auth:{persistSession:false}});
+ const metadata={username,displayName:'Temporary verification account',character:'girl',role:role==='instructor'?'instructor':'admin'};
+ const {data,error}=role!=='admin'
+  ?await signupClient.auth.signUp({email,password,options:{data:metadata}})
+  :await service.auth.admin.createUser({email,password,email_confirm:true,user_metadata:metadata});if(error)throw error;
+ if(role!=='admin') assert(!!data.session,'Public signup requires an immediate session');
  identities.push(data.user.id);
- if(role!=='student'){const {error}=await service.from('profiles').update({role}).eq('id',data.user.id);if(error)throw error;}
+ if(role==='admin'){const {error}=await service.from('profiles').update({role}).eq('id',data.user.id);if(error)throw error;}
+ else {const {data:profile,error}=await service.from('profiles').select('role').eq('id',data.user.id).single();if(error)throw error;assert(profile.role===role,'Public signup assigned the wrong role');}
  const client=createClient(url,anonKey,{auth:{persistSession:false}});
  const {data:session,error:loginError}=await client.auth.signInWithPassword({email,password});if(loginError)throw loginError;
  return {id:data.user.id,token:session.session.access_token,username,email,password};
