@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { projectsRoute } from './projects.ts';
+import { gamesRoute } from './games.ts';
 
 const allowedOrigins = (Deno.env.get("ALLOWED_ORIGINS") ?? "http://localhost:5173")
   .split(",").map((origin) => origin.trim());
@@ -35,6 +36,8 @@ Deno.serve(async (request: Request) => {
     if (path.startsWith('/api/projects') && profile.role !== 'student') return reply({error:'Student access required'},403);
     const projects = await projectsRoute(client, auth.user.id, path, request);
     if (projects) return reply(projects.body, projects.status);
+    const games = await gamesRoute(client,path,request);
+    if(games) return reply(games.body,games.status);
 
     if (path === "/api/auth/me" && request.method === "GET") {
       return reply({ id: profile.id, username: profile.username, displayName: profile.display_name,
