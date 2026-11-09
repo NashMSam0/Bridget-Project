@@ -1,4 +1,8 @@
-const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+import { supabase, supabaseSessionHeaders } from './supabase';
+
+const configuredApiBaseUrl = supabase
+  ? `${import.meta.env.VITE_SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/codebloom-api`
+  : import.meta.env.VITE_API_BASE_URL?.trim();
 const API_BASE_URL = configuredApiBaseUrl
   ? configuredApiBaseUrl.replace(/\/+$/, "")
   : import.meta.env.PROD
@@ -77,6 +81,7 @@ async function request<T>(
   const url = path.startsWith("http") ? path : `${API_BASE_URL}${path}`;
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    ...(await supabaseSessionHeaders()),
     ...(options.headers as Record<string, string> | undefined),
   };
 
@@ -171,12 +176,25 @@ export interface AuthUser {
 export async function registerUser(
   input: RegisterInput,
 ): Promise<{ user: AuthUser; expiresAt: string }> {
+  if (supabase) {
+    if (input.role !== 'student') throw new ApiError('Instructor accounts must be approved by an administrator.', 403);
+    const { data, error } = await supabase.auth.signUp({ email: input.email, password: input.password,
+      options: { data: { username: input.username, displayName: input.displayName, character: input.character, ageGroup: input.ageGroup } } });
+    if (error) throw new ApiError(error.message, 400);
+    if (!data.session) throw new ApiError('Check your email to confirm your account, then sign in.', 400);
+    return { user: await getCurrentUser(), expiresAt: new Date(data.session.expires_at! * 1000).toISOString() };
+  }
   return api.post("/api/auth/register", input);
 }
 
 export async function loginUser(
   input: LoginInput,
 ): Promise<{ user: AuthUser; expiresAt: string }> {
+  if (supabase) {
+    const { data, error } = await supabase.auth.signInWithPassword({ email: input.usernameOrEmail.trim(), password: input.password });
+    if (error) throw new ApiError(error.message, 401);
+    return { user: await getCurrentUser(), expiresAt: new Date(data.session.expires_at! * 1000).toISOString() };
+  }
   // The backend field is `username`, but the UI labels it "email or username";
   // AuthService resolves either value on the server.
   return api.post("/api/auth/login", {
@@ -206,6 +224,11 @@ export async function getFirebaseStatus(): Promise<FirebaseStatus> {
 }
 
 export async function logoutUser(): Promise<void> {
+  if (supabase) {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw new ApiError(error.message, 400);
+    return;
+  }
   await api.post("/api/auth/logout");
 }
 

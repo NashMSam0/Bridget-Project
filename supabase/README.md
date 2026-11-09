@@ -5,12 +5,16 @@ for the C# API yet. The frontend still uses the existing API until route parity
 and Supabase integration are verified.
 
 Implemented: PostgreSQL profiles with row-level security, safe default student
-roles, verified Supabase sessions, profile reads, Gemini coach, and atomic daily
-AI quotas. Gemini credentials belong only in Supabase Edge Function secrets.
+roles, verified Supabase sessions, profile reads and preferences, Gemini coach,
+atomic daily AI quotas, and student project CRUD with database version history.
+The frontend can opt into Supabase email/password Auth and bearer sessions using
+VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY. Leave these unset until
+the remaining feature routes are migrated. Gemini credentials belong only in
+Supabase Edge Function secrets.
 
-Still required: frontend Supabase Auth/session integration; email/username login
+Still required: username login
 compatibility; game and curriculum catalog import; mission validation and rewards;
-projects and version history; classes, assignments, reports, admin and audit routes;
+classes, assignments, reports, admin and audit routes;
 Google sign-in migration; Python execution replacement; existing learner import.
 
 Do not point production at this function until those routes and access controls

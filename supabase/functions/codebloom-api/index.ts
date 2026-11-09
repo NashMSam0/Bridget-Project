@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { projectsRoute } from './projects.ts';
 
 const allowedOrigins = (Deno.env.get("ALLOWED_ORIGINS") ?? "http://localhost:5173")
   .split(",").map((origin) => origin.trim());
@@ -31,6 +32,9 @@ Deno.serve(async (request: Request) => {
     const { data: profile, error } = await client.from("profiles").select("*").eq("id", auth.user.id).single();
     if (error || !profile) return reply({ error: "Profile unavailable" }, 403);
     if (profile.account_status !== "active") return reply({ error: "Account suspended" }, 403);
+    if (path.startsWith('/api/projects') && profile.role !== 'student') return reply({error:'Student access required'},403);
+    const projects = await projectsRoute(client, auth.user.id, path, request);
+    if (projects) return reply(projects.body, projects.status);
 
     if (path === "/api/auth/me" && request.method === "GET") {
       return reply({ id: profile.id, username: profile.username, displayName: profile.display_name,
@@ -39,6 +43,25 @@ Deno.serve(async (request: Request) => {
     if (path === "/api/students/me" && request.method === "GET") {
       return reply({ userId: profile.id, displayName: profile.display_name, username: profile.username,
         character: profile.character, ageGroup: profile.age_group, preferencesJson: JSON.stringify(profile.preferences) });
+    }
+    if (request.method === 'PUT' && ['/api/students/me/character','/api/students/me/preferences'].includes(path)) {
+      if(profile.role !== 'student') return reply({error:'Student access required'},403);
+      const raw = await request.text();
+      if(raw.length>2000) return reply({error:'Request too large'},413);
+      let body;
+      try { body=JSON.parse(raw); } catch { return reply({error:'Invalid JSON'},400); }
+      if(path.endsWith('/character')) {
+        if(!['boy','girl'].includes(body.character)) return reply({error:'Invalid character'},400);
+        const {error} = await client.from('profiles').update({character:body.character}).eq('id',auth.user.id);
+        if(error) throw error;
+        return reply({character:body.character});
+      }
+      if(!['sound','reducedMotion','showHints'].every(key=>typeof body[key]==='boolean'))
+        return reply({error:'Preferences must contain sound, reducedMotion and showHints'},400);
+      const preferences={sound:body.sound,reducedMotion:body.reducedMotion,showHints:body.showHints};
+      const {error} = await client.from('profiles').update({preferences}).eq('id',auth.user.id);
+      if(error) throw error;
+      return reply({preferencesJson:JSON.stringify(preferences)});
     }
     if (path === "/api/ai/assistant/chat" && request.method === "POST") {
       const raw = await request.text();
