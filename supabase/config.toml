@@ -1,0 +1,5 @@
+project_id = "codebloom"
+
+[functions.codebloom-api]
+# The handler validates each protected request with Supabase Auth.
+verify_jwt = false
