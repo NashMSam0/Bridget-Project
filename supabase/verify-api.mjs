@@ -7,7 +7,7 @@ const anonKey=keys.find(k=>k.name==='anon').api_key;
 const identities=[];let classId;let checks=0;
 const assert=(value,label)=>{if(!value)throw new Error(label);checks++;};
 async function call(token,path,method='GET',body){
- const response=await fetch(`${url}/functions/v1/codebloom-api${path}`,{method,headers:{Origin:'http://localhost:5173',...(token?{Authorization:`Bearer ${token}`} : {}),'Content-Type':'application/json'},...(body!==undefined?{body:JSON.stringify(body)}:{})});
+ const response=await fetch(`${url}/functions/v1/codebloom-api${path}`,{method,headers:{Origin:process.env.CODEBLOOM_TEST_ORIGIN??'http://localhost:5173',...(token?{Authorization:`Bearer ${token}`} : {}),'Content-Type':'application/json'},...(body!==undefined?{body:JSON.stringify(body)}:{})});
  const data=await response.json();return {status:response.status,data};
 }
 async function expect(token,path,method='GET',body,status=200){const result=await call(token,path,method,body);assert(result.status===status,`${method} ${path}: expected ${status}, received ${result.status}: ${JSON.stringify(result.data)}`);return result.data;}

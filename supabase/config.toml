@@ -3,3 +3,26 @@ project_id = "codebloom"
 [functions.codebloom-api]
 # The handler validates each protected request with Supabase Auth.
 verify_jwt = false
+
+[auth]
+additional_redirect_urls = ["https://codebloom-drab.vercel.app/**", "http://localhost:5173/**"]
+site_url = "https://codebloom-drab.vercel.app"
+
+[auth.email]
+enable_confirmations = true
+max_frequency = "1m0s"
+otp_length = 8
+
+[auth.sms]
+enable_confirmations = true
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+[db.pooler]
+default_pool_size = 15
+max_client_conn = 200
+
+[storage.vector]
+enabled = false

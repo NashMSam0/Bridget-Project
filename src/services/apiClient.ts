@@ -89,7 +89,7 @@ async function request<T>(
   try {
     res = await fetch(url, {
       ...options,
-      credentials: "include",
+      credentials: supabase ? "omit" : "include",
       headers,
     });
   } catch {
