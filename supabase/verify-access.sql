@@ -43,4 +43,10 @@ do $$begin
  begin perform public.visit_mission_map();raise exception 'Suspended account earned a reward';exception when raise_exception then if SQLERRM<>'Student access required' then raise;end if;end;
 end;$$;
 reset role;
+insert into public.platform_settings(key,value) select 'setup.admin_email',email from auth.users where id=(select id from test_ids where label='teacher') on conflict(key) do update set value=excluded.value;
+update auth.users set email_confirmed_at=now() where id=(select id from test_ids where label='teacher');
+do $$begin
+ if not exists(select 1 from public.profiles where id=(select id from test_ids where label='teacher') and role='admin') then raise exception 'Confirmed owner did not become administrator';end if;
+ if exists(select 1 from public.platform_settings where key='setup.admin_email' and value<>'') then raise exception 'Owner bootstrap was not consumed';end if;
+end;$$;
 ROLLBACK;

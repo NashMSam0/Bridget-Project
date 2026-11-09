@@ -1068,6 +1068,7 @@ class CodeBloomScene extends Phaser.Scene implements GameHost {
 
   private platformerInput(): void {
     if (!this.hero || !this.cursors) return;
+    if (this.isTyping()) return;
     const body = this.hero.body as Phaser.Physics.Arcade.Body;
     const left = this.cursors.left.isDown || this.wasd?.A?.isDown;
     const right = this.cursors.right.isDown || this.wasd?.D?.isDown;
@@ -1168,6 +1169,7 @@ class CodeBloomScene extends Phaser.Scene implements GameHost {
 
   private racingUpdate(): void {
     if (!this.car || this.status === "won" || this.status === "lost") return;
+    if (this.isTyping()) return;
     const body = this.car.body as Phaser.Physics.Arcade.Body;
 
     const up = this.cursors?.up.isDown || this.wasd?.W?.isDown;
@@ -1280,6 +1282,7 @@ class CodeBloomScene extends Phaser.Scene implements GameHost {
 
   private catcherUpdate(): void {
     if (!this.basket || this.status === "won" || this.status === "lost") return;
+    if (this.isTyping()) return;
     if (!this.fallingStars || !this.fallingBombs) return;
     const left = this.cursors?.left.isDown || this.wasd?.A?.isDown;
     const right = this.cursors?.right.isDown || this.wasd?.D?.isDown;
@@ -1836,11 +1839,11 @@ class CodeBloomScene extends Phaser.Scene implements GameHost {
   private setupKeyboard(): void {
     const keyboard = this.input.keyboard;
     if (!keyboard) return;
-    this.cursors = keyboard.createCursorKeys();
-    this.wasd = keyboard.addKeys("W,A,S,D") as Record<string, Phaser.Input.Keyboard.Key>;
+    this.cursors = keyboard.addKeys({up:'UP',down:'DOWN',left:'LEFT',right:'RIGHT',space:'SPACE',shift:'SHIFT'},false) as Phaser.Types.Input.Keyboard.CursorKeys;
+    this.wasd = keyboard.addKeys("W,A,S,D",false) as Record<string, Phaser.Input.Keyboard.Key>;
 
     this.keyHandler = (event: KeyboardEvent) => {
-      if (event.repeat) return;
+      if (event.repeat || this.isTyping()) return;
       const key = this.normaliseKey(event.key);
       if (key) this.keyState[key] = true;
       if (this.status === "won" || this.status === "lost") return;
@@ -1885,13 +1888,10 @@ class CodeBloomScene extends Phaser.Scene implements GameHost {
       if (this.keyUpHandler) keyboard.off("keyup", this.keyUpHandler);
     });
 
-    keyboard.addCapture([
-      Phaser.Input.Keyboard.KeyCodes.UP,
-      Phaser.Input.Keyboard.KeyCodes.DOWN,
-      Phaser.Input.Keyboard.KeyCodes.LEFT,
-      Phaser.Input.Keyboard.KeyCodes.RIGHT,
-      Phaser.Input.Keyboard.KeyCodes.SPACE,
-    ]);
+  }
+
+  private isTyping(): boolean {
+    return Boolean(document.activeElement?.closest('input, textarea, select, [contenteditable="true"], [role="textbox"]'));
   }
 
   private normaliseKey(key: string): string | null {
